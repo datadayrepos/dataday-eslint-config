@@ -1,0 +1,13 @@
+# Deny source publication; the verified archive is the publication boundary.
+**
+!package.json
+!dist/
+!dist/**/
+!dist/**/*.js
+!dist/**/*.mjs
+!dist/**/*.cjs
+!dist/**/*.d.ts
+!dist/**/*.css
+!LICENSE
+!LICENCE
+!NOTICE

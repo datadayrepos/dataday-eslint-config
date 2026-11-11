@@ -24,11 +24,15 @@
     "stub": "tsup src/index.ts --format esm",
     "dev": "tsup src/index.ts --format esm,cjs --watch & eslint-flat-config-viewer",
     "lint": "pnpm run stub && eslint .",
-    "prepack": "nr build",
-    "release": "bumpp && pnpm publish",
+    "prepack": "node scripts/npm-package.mjs guard",
+    "release": "bumpp && pnpm run pack:release && pnpm run pub",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "pack:build": "npm run build",
+    "prepublishOnly": "node scripts/npm-package.mjs guard",
+    "pack:release": "node scripts/npm-package.mjs pack",
+    "pub": "node scripts/npm-package.mjs publish"
   },
   "peerDependencies": {
     "eslint": ">=8.0.0"

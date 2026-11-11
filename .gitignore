@@ -81,3 +81,6 @@ dist
 _fixtures
 
 .DS_Store
+
+# Verified npm archives, never commit.
+.npm-package/
