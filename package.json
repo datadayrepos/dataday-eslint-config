@@ -1,7 +1,7 @@
 {
   "name": "@datadayrepos/eslint-config",
   "type": "module",
-  "version": "1.0.1-beta.11",
+  "version": "1.0.2",
   "packageManager": "pnpm@8.9.0",
   "description": "DataDayRepos eslint presets. Custom fork of Antfu´s original",
   "license": "MIT",
