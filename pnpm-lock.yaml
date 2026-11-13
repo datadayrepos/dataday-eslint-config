@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@datadayrepos/eslint-define-config':
-        specifier: ^1.24.11
-        version: 1.24.11
+        specifier: 1.24.13
+        version: 1.24.13
       '@datadayrepos/eslint-plugin-datadayrepos':
         specifier: ^1.0.0-Beta12
         version: 1.0.0-Beta13(eslint@8.51.0)(typescript@5.2.2)
@@ -79,11 +79,11 @@ importers:
         version: 1.2.2
     devDependencies:
       '@datadayrepos/eslint-config':
-        specifier: workspace:*
+        specifier: 1.0.2
         version: 'link:'
       '@datadayrepos/ni':
-        specifier: ^0.21.8
-        version: 0.21.8
+        specifier: 0.21.9
+        version: 0.21.9
       '@stylistic/eslint-plugin-migrate':
         specifier: ^0.0.8
         version: 0.0.8(eslint@8.51.0)(typescript@5.2.2)
@@ -350,8 +350,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@datadayrepos/eslint-define-config@1.24.11:
-    resolution: {integrity: sha512-gPx2EhAXpeaNv5lcP1/HCN5SJsQtmFR65jD0VxCxmVZ50mWVJqAS2pRv8Vn8Fpno/sl2cmIjDX6IHLDL2F2aAQ==}
+  /@datadayrepos/eslint-define-config@1.24.13:
+    resolution: {integrity: sha512-zcV866SXRshmxLDkafIyuMa57QIHvYqlxwMtN0Q8MqCKCC+qUGtpApp22O5psfSW0cRi9YqyVi4kcGIASUyIlQ==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0', pnpm: '>= 8.6.0'}
     dev: false
 
@@ -367,8 +367,8 @@ packages:
       - typescript
     dev: false
 
-  /@datadayrepos/ni@0.21.8:
-    resolution: {integrity: sha512-UxLk9c+k0goQe4jstFWV1EfNWvM5NiqID1745FdbGtRDzwkCd7yw2IKOaph3G9uvKGzWhSaNL//3ogRYAWqMHQ==}
+  /@datadayrepos/ni@0.21.9:
+    resolution: {integrity: sha512-DJAcsmDaj0ob3XP1p1/83wdDr0LAt92aSxn+kxZbvgdSnRdqZkoWlo8qrvBNQRFI/n2HXj/epMVBh4mt3Wxs0w==}
     hasBin: true
     dev: true
 
