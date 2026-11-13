@@ -1,5 +1,5 @@
-import { packages } from '@eslint-stylistic/metadata'
 import fs from 'node:fs/promises'
+import { packages } from '@eslint-stylistic/metadata'
 
 const rules = packages.filter(i => i.shortId !== 'default').flatMap(i => i.rules)
 

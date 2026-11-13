@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Keep nested package-script calls on the packageManager pinned by this checkout.
+exec corepack pnpm "$@"

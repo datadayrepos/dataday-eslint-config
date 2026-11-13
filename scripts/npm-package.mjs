@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -29,9 +30,9 @@ export function publicManifest(pkg) {
   assert(pkg.name && pkg.version && pkg.private !== true, 'Expected a publishable named/versioned package.')
   assert(!pkg.bundleDependencies && !pkg.bundledDependencies, 'Bundled dependencies require a separate reviewed profile.')
   const result = Object.fromEntries(fields.filter(key => pkg[key] !== undefined).map(key => [key, pkg[key]]))
-  for (const section of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+  for (const section of ['dependencies', 'optionalDependencies', 'peerDependencies'])
     for (const spec of Object.values(result[section] || {})) assert(!/^(?:workspace|file|link|catalog):/.test(spec), 'Resolve local dependency protocols through the authoritative publisher first.')
-  }
+
   return result
 }
 
@@ -112,12 +113,12 @@ function checkEntries(pkg, files) {
   for (const key of ['exports', 'imports', 'browser', 'bin', 'typesVersions']) target(pkg[key])
   if (typeof pkg.browser === 'string')
     target(`./${pkg.browser.replace(/^\.\//, '')}`)
-  if (typeof pkg.bin === 'string') {
+  if (typeof pkg.bin === 'string')
     target(`./${pkg.bin.replace(/^\.\//, '')}`)
-  }
-  else {
+
+  else
     for (const name of Object.values(pkg.bin || {})) target(`./${name.replace(/^\.\//, '')}`)
-  }
+
   const typeTargets = (value) => {
     if (Array.isArray(value))
       return value.forEach(typeTargets)
@@ -187,7 +188,7 @@ function build(pkg, out) {
   const buildScript = pkg.scripts?.['pack:build'] ? 'pack:build' : 'build'
   if (pkg.scripts?.build || pkg.scripts?.['pack:build']) {
     // Only generated dist output is cleaned; never remove tracked/source runtime files.
-    assert(roots.some(name => name === buildDirectory), 'The reviewed build output root is required.')
+    assert(roots.includes(buildDirectory), 'The reviewed build output root is required.')
     assert(!run('git', ['ls-files', '--', buildDirectory], root, true).trim(), 'Refusing to clean tracked dist files.')
     if (fs.existsSync(path.join(root, buildDirectory)))
       assert(!fs.lstatSync(path.join(root, buildDirectory)).isSymbolicLink(), 'Refusing to clean symlinked dist.')
@@ -200,7 +201,7 @@ function build(pkg, out) {
       const previous = process.env.PATH
       // Expose only pnpm shims; Corepack's npm shim rejects legacy npm substeps.
       const tools = fs.mkdtempSync(path.join(out, 'toolchain-'))
-      const quote = value => `'${value.replaceAll("'", "'\\''")}'`
+      const quote = value => `'${value.replaceAll('\'', '\'\\\'\'')}'`
       for (const command of ['pnpm', 'pnpx'])
         fs.writeFileSync(path.join(tools, command), `#!/bin/sh\nexec ${quote(executable)} ${command} "$@"\n`, { mode: 0o700 })
       process.env.PATH = `${tools}${path.delimiter}${previous || ''}`

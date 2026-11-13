@@ -16,11 +16,11 @@ export function stylistic(options: StylisticConfig = {}): ConfigItem[] {
         style: pluginStylistic,
       },
       rules: {
+        'curly': ['error', 'multi-or-nest', 'consistent'],
         'datadayrepos/consistent-list-newline': 'error',
         'datadayrepos/if-newline': 'error',
-        'datadayrepos/top-level-function': 'error',
 
-        'curly': ['error', 'multi-or-nest', 'consistent'],
+        'datadayrepos/top-level-function': 'error',
 
         'style/array-bracket-spacing': ['error', 'never'],
         'style/arrow-spacing': ['error', { after: true, before: true }],
