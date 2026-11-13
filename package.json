@@ -1,7 +1,7 @@
 {
   "name": "@datadayrepos/eslint-config",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "packageManager": "pnpm@8.9.0",
   "description": "DataDayRepos eslint presets. Custom fork of Antfu´s original",
   "license": "MIT",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@datadayrepos/eslint-define-config": "1.24.13",
-    "@datadayrepos/eslint-plugin-datadayrepos": "^1.0.0-Beta12",
+    "@datadayrepos/eslint-plugin-datadayrepos": "1.0.0-Beta13",
     "@stylistic/eslint-plugin": "0.0.8",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
@@ -63,7 +63,7 @@
     "yaml-eslint-parser": "^1.2.2"
   },
   "devDependencies": {
-    "@datadayrepos/eslint-config": "1.0.2",
+    "@datadayrepos/eslint-config": "1.0.3",
     "@datadayrepos/ni": "0.21.9",
     "@stylistic/eslint-plugin-migrate": "^0.0.8",
     "@types/eslint": "^8.44.4",

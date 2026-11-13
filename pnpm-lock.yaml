@@ -12,7 +12,7 @@ importers:
         specifier: 1.24.13
         version: 1.24.13
       '@datadayrepos/eslint-plugin-datadayrepos':
-        specifier: ^1.0.0-Beta12
+        specifier: 1.0.0-Beta13
         version: 1.0.0-Beta13(eslint@8.51.0)(typescript@5.2.2)
       '@stylistic/eslint-plugin':
         specifier: 0.0.8
@@ -79,7 +79,7 @@ importers:
         version: 1.2.2
     devDependencies:
       '@datadayrepos/eslint-config':
-        specifier: 1.0.2
+        specifier: 1.0.3
         version: 'link:'
       '@datadayrepos/ni':
         specifier: 0.21.9
