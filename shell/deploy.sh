@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# check-private-updates-deploy: npm-patch-v1
 set -euo pipefail
 
 # ./shell/deploy.sh
@@ -18,6 +19,8 @@ No arguments: interactive Git / npm / combined menu.
 Interactive actions offer the standard patch/minor/major/no version choice.
 --check and --pack never bump versions. Dependencies are never updated here.
 Git and npm actions require separate operator confirmations.
+JS_DEPLOY_MODE=dependency-patch: one combined patch/check/stage-all/Git/npm action;
+commit-message and npm authentication prompts remain interactive.
 HELP
 }
 
@@ -26,6 +29,13 @@ case "${1:-}" in
   --help|-h) usage; exit 0 ;;
   ""|--check|--pack) ;;
   *) usage >&2; exit 2 ;;
+esac
+
+DEPENDENCY_PATCH=0
+case "${JS_DEPLOY_MODE:-}" in
+  "") ;;
+  dependency-patch) DEPENDENCY_PATCH=1 ;;
+  *) printf 'ERROR: Unsupported JS_DEPLOY_MODE.\n' >&2; exit 2 ;;
 esac
 
 require_main() {
@@ -39,6 +49,10 @@ require_main() {
 }
 
 confirm() {
+  if [[ "$DEPENDENCY_PATCH" == 1 ]]; then
+    printf '%s [approved dependency-patch mode]\n' "$1"
+    return 0
+  fi
   local answer
   read -r -p "$1 [y/N] " answer || return 1
   [[ "$answer" == y || "$answer" == Y ]]
@@ -51,7 +65,12 @@ bump_version() {
   current="$(node -p 'require("./package.json").version')"
   printf '\nBump version? (current: %s)\n  p) patch\n  m) minor\n  M) major\n  n) no\n' "$current"
   while true; do
-    read -r -p "Choose [p/m/M/n] (default: n): " choice || return 1
+    if [[ "$DEPENDENCY_PATCH" == 1 ]]; then
+      choice=p
+      printf 'Dependency-update mode: patch selected.\n'
+    else
+      read -r -p "Choose [p/m/M/n] (default: n): " choice || return 1
+    fi
     choice="${choice:-n}"
     case "$choice" in
       p|m|M|n) break ;;
@@ -163,8 +182,12 @@ publish_release() {
   require_main
   local answer
   printf 'Publish the current @datadayrepos/eslint-config version through its verified-archive publisher.\n'
-  read -r -p "Type PUBLISH to publish the verified archives: " answer
-  [[ "$answer" == PUBLISH ]] || { printf 'Publication canceled.\n'; return 1; }
+  if [[ "$DEPENDENCY_PATCH" == 1 ]]; then
+    printf 'Publication approved by dependency-patch mode.\n'
+  else
+    read -r -p "Type PUBLISH to publish the verified archives: " answer
+    [[ "$answer" == PUBLISH ]] || { printf 'Publication canceled.\n'; return 1; }
+  fi
   if npm whoami >/dev/null 2>&1; then
     printf 'NPM: already authenticated; login is not needed.\n'
   else
@@ -176,6 +199,22 @@ publish_release() {
   corepack pnpm run pub
   printf 'NPM publish completed successfully.\n'
 }
+
+if [[ "$DEPENDENCY_PATCH" == 1 ]]; then
+  [[ $# == 0 && -t 0 && -t 1 ]] || { printf 'ERROR: Dependency-update mode requires an interactive terminal and no arguments.\n' >&2; exit 2; }
+  require_main
+  node --input-type=commonjs - "$ROOT_DIR/package.json" <<'NODE'
+const p = JSON.parse(require('node:fs').readFileSync(process.argv[2], 'utf8'));
+if (Object.hasOwn(p, 'private') && typeof p.private !== 'boolean') throw new Error('private must be a JSON boolean.');
+if (p.private === true) throw new Error('Dependency-update mode cannot publish a private package.');
+if (typeof p.version !== 'string' || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(p.version)) throw new Error('Dependency-update mode requires a stable x.y.z version; use the manual flow otherwise.');
+for (const name of ['pack:release', 'pub']) if (typeof p.scripts?.[name] !== 'string' || !p.scripts[name].trim()) throw new Error('Missing guarded release script: ' + name);
+NODE
+  preflight
+  git_commit_push
+  npm_publish
+  exit 0
+fi
 
 case "${1:-}" in
   --check) run_checks; exit 0 ;;

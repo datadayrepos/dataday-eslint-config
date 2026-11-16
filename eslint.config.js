@@ -30,4 +30,11 @@ export default datadayrepos(
       'style-migrate/migrate': ['error', { namespaceTo: 'style' }],
     },
   },
+  {
+    // Hub owns this helper's source bytes and global-process style.
+    files: ['shell/check-private-updates/main.mjs'],
+    rules: {
+      'node/prefer-global/process': ['error', 'always'],
+    },
+  },
 )

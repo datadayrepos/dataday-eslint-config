@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@datadayrepos/eslint-define-config':
-        specifier: 1.24.14
-        version: 1.24.14
+        specifier: 1.24.15
+        version: 1.24.15
       '@datadayrepos/eslint-plugin-datadayrepos':
         specifier: 1.0.0-Beta13
         version: 1.0.0-Beta13(eslint@8.51.0)(typescript@5.2.2)
@@ -78,12 +78,6 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
     devDependencies:
-      '@datadayrepos/eslint-config':
-        specifier: 1.0.4
-        version: 'link:'
-      '@datadayrepos/ni':
-        specifier: 0.21.10
-        version: 0.21.10
       '@stylistic/eslint-plugin-migrate':
         specifier: ^0.0.8
         version: 0.0.8(eslint@8.51.0)(typescript@5.2.2)
@@ -111,6 +105,9 @@ importers:
       esno:
         specifier: ^0.17.0
         version: 0.17.0
+      execa:
+        specifier: 7.2.0
+        version: 7.2.0
       fast-glob:
         specifier: ^3.3.1
         version: 3.3.1
@@ -123,6 +120,9 @@ importers:
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
+      semver:
+        specifier: 7.7.4
+        version: 7.7.4
       simple-git-hooks:
         specifier: ^2.9.0
         version: 2.9.0
@@ -350,8 +350,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@datadayrepos/eslint-define-config@1.24.14:
-    resolution: {integrity: sha512-ptxlno2CwX4JvEHl1jqtJ11IO33yEGg5tgL5hL+CQfghW8Up3rAT2L65jrX2rG5ApKfdPseZ1HuxuP+e47zA6w==}
+  /@datadayrepos/eslint-define-config@1.24.15:
+    resolution: {integrity: sha512-OWeViJeRhYgwToZ4LWs6vw3TWMFScG27AQLHMeO2sU0WNNoKaLNMik10UZdm553GNIhwOsbYniLse3Xzy3Kh7w==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0', pnpm: '>= 8.6.0'}
     dev: false
 
@@ -366,11 +366,6 @@ packages:
       - supports-color
       - typescript
     dev: false
-
-  /@datadayrepos/ni@0.21.10:
-    resolution: {integrity: sha512-CvMC3YGSePnbFqzB1dWOvcvfl/fxp/kPhQ1C4prajS4IUw2FIful0mSc0HkDGYPgrhR4SiixGyzzApjnenCKbw==}
-    hasBin: true
-    dev: true
 
   /@es-joy/jsdoccomment@0.40.1:
     resolution: {integrity: sha512-YORCdZSusAlBrFpZ77pJjc5r1bQs5caPWtAu+WWmiSo+8XaUzseapVrfAtiRFbQWnrBxxLLEwF6f6ZG/UgCQCg==}
@@ -1133,7 +1128,7 @@ packages:
       graphemer: 1.4.0
       ignore: 5.2.4
       natural-compare: 1.4.0
-      semver: 7.5.4
+      semver: 7.7.4
       ts-api-utils: 1.0.3(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
@@ -1206,7 +1201,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.5.4
+      semver: 7.7.4
       ts-api-utils: 1.0.3(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
@@ -1225,7 +1220,7 @@ packages:
       '@typescript-eslint/types': 6.7.5
       '@typescript-eslint/typescript-estree': 6.7.5(typescript@5.2.2)
       eslint: 8.51.0
-      semver: 7.5.4
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -1478,7 +1473,7 @@ packages:
   /builtins@5.0.1:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
-      semver: 7.5.4
+      semver: 7.7.4
     dev: false
 
   /bumpp@9.2.0:
@@ -1491,7 +1486,7 @@ packages:
       cac: 6.7.14
       fast-glob: 3.3.1
       prompts: 2.4.2
-      semver: 7.5.4
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2109,7 +2104,7 @@ packages:
       is-glob: 4.0.3
       minimatch: 3.1.2
       resolve: 1.22.8
-      semver: 7.5.4
+      semver: 7.7.4
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-typescript
@@ -2131,7 +2126,7 @@ packages:
       eslint: 8.51.0
       esquery: 1.5.0
       is-builtin-module: 3.2.1
-      semver: 7.5.4
+      semver: 7.7.4
       spdx-expression-parse: 3.0.1
     transitivePeerDependencies:
       - supports-color
@@ -2177,7 +2172,7 @@ packages:
       is-core-module: 2.13.0
       minimatch: 3.1.2
       resolve: 1.22.8
-      semver: 7.5.4
+      semver: 7.7.4
     dev: false
 
   /eslint-plugin-no-only-tests@3.1.0:
@@ -2211,7 +2206,7 @@ packages:
       read-pkg-up: 7.0.1
       regexp-tree: 0.1.27
       regjsparser: 0.10.0
-      semver: 7.5.4
+      semver: 7.7.4
       strip-indent: 3.0.0
     dev: false
 
@@ -2261,7 +2256,7 @@ packages:
       natural-compare: 1.4.0
       nth-check: 2.1.1
       postcss-selector-parser: 6.0.13
-      semver: 7.5.4
+      semver: 7.7.4
       vue-eslint-parser: 9.3.2(eslint@8.51.0)
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
@@ -3099,7 +3094,7 @@ packages:
       acorn: 8.10.0
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
-      semver: 7.5.4
+      semver: 7.7.4
     dev: false
 
   /jsonc-parser@3.2.0:
@@ -3252,12 +3247,6 @@ packages:
     dependencies:
       yallist: 3.1.1
     dev: true
-
-  /lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-    dependencies:
-      yallist: 4.0.0
 
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
@@ -3934,12 +3923,10 @@ packages:
     hasBin: true
     dev: true
 
-  /semver@7.5.4:
-    resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
+  /semver@7.7.4:
+    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
     hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
 
   /set-function-name@2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
@@ -4618,7 +4605,7 @@ packages:
       espree: 9.6.1
       esquery: 1.5.0
       lodash: 4.17.21
-      semver: 7.5.4
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4716,6 +4703,7 @@ packages:
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+    dev: true
 
   /yaml-eslint-parser@1.2.2:
     resolution: {integrity: sha512-pEwzfsKbTrB8G3xc/sN7aw1v6A6c/pKxLAkjclnAyo5g5qOh6eL9WGu0o3cSDQZKrTNk4KL4lQSwZW+nBkANEg==}
