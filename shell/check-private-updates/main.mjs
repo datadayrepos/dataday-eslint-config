@@ -159,6 +159,7 @@ function installDependencies(root, manager) {
 
 export async function runUpdates(root, options = {}) {
   const output = options.output ?? process.stdout
+  const individual = options.individual !== false
   const colors = Boolean(output.isTTY && !Object.hasOwn(process.env, 'NO_COLOR') && process.env.TERM !== 'dumb')
   const print = text => output.write(`${text}\n`)
   const manifestPath = path.join(root, 'package.json')
@@ -203,22 +204,22 @@ export async function runUpdates(root, options = {}) {
       return reader.question(question, { signal: controller.signal })
     })
     for (const [index, group] of proposed.entries()) {
-      print(`\n${paint(36, `[${index + 1}/${proposed.length}] REVIEW`, colors)}`)
+      print(`\n${paint(36, `[${index + 1}/${proposed.length}] ${individual ? 'REVIEW' : 'AUTO-ACCEPT'}`, colors)}`)
       for (const peer of [false, true]) {
         const fields = group.fields.filter(field => field.proposed && (field.section === 'peerDependencies') === peer)
         if (!fields.length)
           continue
         if (peer)
-          print(paint(33, 'Peer declarations are consumer compatibility promises; review separately. No development dependency will be added.', colors))
+          print(paint(33, `Peer declarations are consumer compatibility promises; ${individual ? 'review separately' : 'included in automatic acceptance'}. No development dependency will be added.`, colors))
         print(renderGroup(group, peer ? fields : group.fields, colors))
-        const answer = await ask(`${peer ? 'Apply these peer compatibility declarations' : 'Apply these dependency declarations'}? [y/N] `)
+        const answer = individual ? await ask(`${peer ? 'Apply these peer compatibility declarations' : 'Apply these dependency declarations'}? [y/N] `) : 'y'
         if (answer === null || answer === undefined)
           throw new Error('Input closed before application.')
         for (const field of fields) {
           field.selected = /^y$/i.test(answer.trim())
           field.result = field.selected ? 'accepted; not applied yet' : 'declined'
         }
-        print(fields.some(field => field.selected) ? 'Accepted for application after review.' : 'Declined; these declarations stay unchanged.')
+        print(fields.some(field => field.selected) ? individual ? 'Accepted for application after review.' : 'Accepted automatically for application.' : 'Declined; these declarations stay unchanged.')
       }
       if (group.fields.some(field => field.selected) && group.fields.some(field => !semver.validRange(field.selected ? field.proposed : field.current) || !semver.satisfies(group.latest, field.selected ? field.proposed : field.current))) {
         incomplete = true
@@ -271,15 +272,56 @@ export async function runUpdates(root, options = {}) {
 }
 
 export async function runUpdater(root, options = {}) {
+  const output = options.output ?? process.stdout
+  if (!options.askMode && !options.ask && !process.stdin.isTTY)
+    throw new Error('An interactive terminal is required; no updates applied.')
+  let modeReader
+  let individual
+  try {
+    const controller = new AbortController()
+    const ask = options.askMode ?? options.ask ?? (async (question) => {
+      if (!modeReader) {
+        modeReader = createInterface({ input: process.stdin, output })
+        modeReader.once('close', () => controller.abort())
+      }
+      return modeReader.question(question, { signal: controller.signal })
+    })
+    while (true) {
+      const answer = await ask('Accept updates individually? [y/N] ')
+      if (answer === null || answer === undefined)
+        throw new Error('Input closed before selecting approval mode.')
+      if (/^(?:y|yes)$/i.test(answer.trim())) {
+        individual = true
+        break
+      }
+      if (/^(?:n|no)?$/i.test(answer.trim())) {
+        individual = false
+        break
+      }
+      output.write('Please answer y or n.\n')
+    }
+  }
+  catch {
+    output.write('Approval-mode selection canceled; no registry reads or package changes performed.\n')
+    return 1
+  }
+  finally {
+    modeReader?.close()
+    // Release terminal input before npm authentication and the later review.
+    if (modeReader)
+      process.stdin.pause()
+  }
+  if (!individual)
+    output.write('Automatic acceptance selected: all proposed dependency and peer changes will be accepted. Existing validation and the separate deploy prompt remain active.\n')
   let installed = false
   const status = await runUpdates(root, {
     ...options,
+    individual,
     install: async (directory, manager) => {
       await (options.install ?? installDependencies)(directory, manager)
       installed = true
     },
   })
-  const output = options.output ?? process.stdout
   if (status !== 0 || !installed || !(options.interactive ?? (process.stdin.isTTY && output.isTTY)))
     return status
 
@@ -346,7 +388,7 @@ export async function runUpdater(root, options = {}) {
 async function main() {
   try {
     if (process.argv.length === 3 && process.argv[2] === '--help')
-      process.stdout.write('Usage: ./shell/check-private-updates.sh\nScan private dependencies, review current -> proposed declarations, then install accepted edits.\nThe adjacent package root is always used. After successful installation, an explicitly opted-in npm deployer may be offered [Y/n].\nThat optional action patches, checks, stages all changes, commits/pushes and publishes; commit-message and npm-auth prompts stay interactive.\nSPA/server deployment is never offered.\n')
+      process.stdout.write('Usage: ./shell/check-private-updates.sh\nFirst: Accept updates individually? [y/N]. Enter/No automatically accepts all proposed changes; Yes keeps individual approvals.\nThen scan private dependencies, show current -> proposed declarations, and install accepted edits.\nThe adjacent package root is always used. After successful installation, an explicitly opted-in npm deployer may be offered [Y/n].\nThat optional action patches, checks, stages all changes, commits/pushes and publishes; commit-message and npm-auth prompts stay interactive.\nSPA/server deployment is never offered.\n')
     else if (process.argv.length !== 2)
       throw new Error('Unknown arguments; use --help. No updates applied.')
     else
